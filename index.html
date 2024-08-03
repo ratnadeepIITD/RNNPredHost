@@ -60,45 +60,31 @@
                     "format": {"type": "csv"}
                 },
                 "transform": [
-                    {"filter": `datum.PTID == '${selectedPtid}'`}
+                    {"filter": `datum.PTID == '${selectedPtid}'`},
+                    {"fold": ["Original", "Predicted"], "as": ["Type", "Value"]}
                 ],
                 "width": "container",
                 "height": "container",
-                "layer": [
-                    {
-                        "mark": {"type": "line", "point": {"filled": true, "fill": "green"}},
-                        "encoding": {
-                            "x": {"field": "Time", "type": "ordinal", "title": "Time Points"},
-                            "y": {"field": "Original", "type": "quantitative", "title": "ADAS13 Value"},
-                            "color": {"value": "green"},
-                            "tooltip": [
-                                {"field": "Time", "type": "ordinal", "title": "Time"},
-                                {"field": "Original", "type": "quantitative", "title": "Original ADAS13"}
-                            ],
-                            "strokeDash": {"value": [0]}
-                        }
-                    },
-                    {
-                        "mark": {"type": "line", "strokeDash": [5,5], "point": {"filled": true, "fill": "blue"}},
-                        "encoding": {
-                            "x": {"field": "Time", "type": "ordinal", "title": "Time Points"},
-                            "y": {"field": "Predicted", "type": "quantitative", "title": "ADAS13 Value"},
-                            "color": {"value": "blue"},
-                            "tooltip": [
-                                {"field": "Time", "type": "ordinal", "title": "Time"},
-                                {"field": "Predicted", "type": "quantitative", "title": "Predicted ADAS13"}
-                            ]
-                        }
-                    }
-                ],
-                "resolve": {"scale": {"color": "independent"}},
+                "mark": {"type": "line", "point": {"filled": true}},
                 "encoding": {
+                    "x": {"field": "Time", "type": "ordinal", "title": "Time Points"},
+                    "y": {"field": "Value", "type": "quantitative", "title": "ADAS13 Value"},
                     "color": {
-                        "field": "label",
+                        "field": "Type", 
                         "type": "nominal",
-                        "legend": {"title": "Legend"},
-                        "scale": {"domain": ["Original", "Predicted"], "range": ["green", "blue"]}
-                    }
+                        "scale": {"domain": ["Original", "Predicted"], "range": ["green", "blue"]},
+                        "legend": {"title": "Legend"}
+                    },
+                    "strokeDash": {
+                        "field": "Type",
+                        "type": "nominal",
+                        "scale": {"domain": ["Original", "Predicted"], "range": [0, [5, 5]]}
+                    },
+                    "tooltip": [
+                        {"field": "Time", "type": "ordinal", "title": "Time"},
+                        {"field": "Value", "type": "quantitative", "title": "ADAS13 Value"},
+                        {"field": "Type", "type": "nominal", "title": "Type"}
+                    ]
                 }
             };
 
