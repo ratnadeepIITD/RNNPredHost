@@ -65,27 +65,40 @@
                 ],
                 "width": "container",
                 "height": "container",
-                "mark": {"type": "line", "point": {"filled": true}},
-                "encoding": {
-                    "x": {"field": "Time", "type": "ordinal", "title": "Time Points"},
-                    "y": {"field": "Value", "type": "quantitative", "title": "ADAS13 Value"},
-                    "color": {
-                        "field": "Type", 
-                        "type": "nominal",
-                        "scale": {"domain": ["Original", "Predicted"], "range": ["green", "blue"]},
-                        "legend": {"title": "Legend"}
+                "layer": [
+                    {
+                        "mark": {"type": "line", "point": {"filled": true}},
+                        "encoding": {
+                            "x": {"field": "Time", "type": "ordinal", "title": "Time Points"},
+                            "y": {"field": "Value", "type": "quantitative", "title": "ADAS13 Value"},
+                            "color": {
+                                "field": "Type", 
+                                "type": "nominal",
+                                "scale": {"domain": ["Original", "Predicted"], "range": ["green", "blue"]},
+                                "legend": {"title": "Legend"}
+                            },
+                            "strokeDash": {
+                                "field": "Type",
+                                "type": "nominal",
+                                "scale": {"domain": ["Original", "Predicted"], "range": [0, [5, 5]]}
+                            },
+                            "tooltip": [
+                                {"field": "Time", "type": "ordinal", "title": "Time"},
+                                {"field": "Value", "type": "quantitative", "title": "ADAS13 Value"},
+                                {"field": "Type", "type": "nominal", "title": "Type"}
+                            ]
+                        }
                     },
-                    "strokeDash": {
-                        "field": "Type",
-                        "type": "nominal",
-                        "scale": {"domain": ["Original", "Predicted"], "range": [0, [5, 5]]}
-                    },
-                    "tooltip": [
-                        {"field": "Time", "type": "ordinal", "title": "Time"},
-                        {"field": "Value", "type": "quantitative", "title": "ADAS13 Value"},
-                        {"field": "Type", "type": "nominal", "title": "Type"}
-                    ]
-                }
+                    {
+                        "mark": {"type": "text", "dy": -10},
+                        "encoding": {
+                            "x": {"field": "Time", "type": "ordinal"},
+                            "y": {"field": "Value", "type": "quantitative"},
+                            "text": {"field": "Value", "type": "quantitative"},
+                            "color": {"field": "Type", "type": "nominal", "scale": {"domain": ["Original", "Predicted"], "range": ["green", "blue"]}}
+                        }
+                    }
+                ]
             };
 
             vegaEmbed('#vis', spec);
