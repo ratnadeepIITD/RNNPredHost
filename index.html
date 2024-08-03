@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADAS13 Visualization</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.20.2"></script>
+</head>
+<body>
+    <h1>ADAS13 Visualization</h1>
+    <label for="ptid-select">Select PTID:</label>
+    <select id="ptid-select" onchange="updatePlot()">
+        <!-- Options will be populated by JavaScript -->
+    </select>
+    <div id="vis"></div>
+
+    <script>
+        const ptids = ["patient1", "patient2"]; // List of PTIDs
+        const ptidSelect = document.getElementById('ptid-select');
+
+        // Populate the dropdown
+        ptids.forEach(ptid => {
+            const option = document.createElement('option');
+            option.value = ptid;
+            option.text = ptid;
+            ptidSelect.add(option);
+        });
+
+        function updatePlot() {
+            const selectedPtid = ptidSelect.value;
+            const spec = {
+                "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+                "description": `ADAS13 Values for ${selectedPtid}`,
+                "data": {
+                    "url": "data.csv",
+                    "format": {"type": "csv"}
+                },
+                "transform": [
+                    {"filter": `datum.PTID == '${selectedPtid}'`}
+                ],
+                "layer": [
+                    {
+                        "mark": "line",
+                        "encoding": {
+                            "x": {"field": "Time", "type": "ordinal", "title": "Time Points"},
+                            "y": {"field": "Original", "type": "quantitative", "title": "ADAS13 Value"},
+                            "color": {"value": "blue"},
+                            "tooltip": [
+                                {"field": "Time", "type": "ordinal", "title": "Time"},
+                                {"field": "Original", "type": "quantitative", "title": "Original ADAS13"}
+                            ]
+                        }
+                    },
+                    {
+                        "mark": "line",
+                        "encoding": {
+                            "x": {"field": "Time", "type": "ordinal", "title": "Time Points"},
+                            "y": {"field": "Predicted", "type": "quantitative", "title": "ADAS13 Value"},
+                            "color": {"value": "red"},
+                            "tooltip": [
+                                {"field": "Time", "type": "ordinal", "title": "Time"},
+                                {"field": "Predicted", "type": "quantitative", "title": "Predicted ADAS13"}
+                            ]
+                        }
+                    }
+                ]
+            };
+
+            vegaEmbed('#vis', spec);
+        }
+
+        // Initial plot
+        updatePlot();
+    </script>
+</body>
+</html>

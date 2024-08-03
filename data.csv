@@ -1,0 +1,9 @@
+PTID,Time,Original,Predicted
+patient1,bl,10,10
+patient1,m12,15,15
+patient1,m24,20,18
+patient1,m36,25,22
+patient2,bl,12,12
+patient2,m12,16,16
+patient2,m24,21,19
+patient2,m36,26,23
